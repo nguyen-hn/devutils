@@ -1,8 +1,9 @@
 # devutils
-Dev utils tool by bash script
+Dev utils tool by bash script.
 
 ## Usage
 
-'''
-source devtools
-'''
+Run command
+
+    source devtools
+
