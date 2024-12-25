@@ -1,0 +1,67 @@
+#!/bin/bash
+
+check_leap_year() {
+    year=$1
+    if [ $((year % 4)) -eq 0 ]; then
+      if [ $((year % 100)) -eq 0 ]; then 
+          if [ $((year % 400)) -eq 0 ]; then echo "its a leap year"; else echo "its not a leap year"; fi
+      else 
+          echo "Its a leap year"
+      fi
+    else
+        echo "its not a leap year"
+    fi
+}
+
+unix_time_converter() {
+    if [ $# == 0 ]; then
+        echo "Now"
+        year=$(date +%Y)
+        doy=$(date +%j)
+        woy=$(date +%V)
+        check_leap_year $year
+        echo "Epoch time: $(date +%s)"
+        echo "Day of year: $doy"
+        echo "Week of year: $woy"
+    else
+        echo "$(date -d @$1)"
+        year=$(date -d @$1 +%Y)
+        doy=$(date -d @$1 +%j)
+        woy=$(date -d @$1 +%V)
+        check_leap_year $year
+        echo "Epoch time: $(date +%s)"
+        echo "Day of year: $doy"
+        echo "Week of year: $woy"
+    fi
+}
+
+encode() {
+        if [ $# == 1 ]; then echo -n $1 | base64 ; fi
+}
+
+decode() {
+    if [ $# == 1 ]; then echo -n $1 | base64 -d ; fi
+}
+
+ascii_to_hex() {
+    if [ $# == 1 ]; then
+        encode_str=$(echo $1 | sed 's/[[:space:]]//g' | xxd -ps -c 200)
+        echo "$encode_str"
+    fi
+}
+
+hex_to_ascii() {
+    if [ $# == 1 ]; then
+        echo "String: "
+    fi
+}
+
+hash_generator() {
+    if [ $# == 1 ]; then
+        echo "SHA256: $(echo -n $1 | tr -d "\n\r" | sha256sum)"
+        echo "SHA1:  $(echo -n $1 | sha1sum)"
+        echo "SHA224: $(echo -n $1 | sha224sum)"
+        echo -n $1 | sha384sum
+        echo -n $1 | sha512sum
+    fi
+}
